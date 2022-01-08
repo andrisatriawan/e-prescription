@@ -7,6 +7,7 @@ Aplikasi sederhana untuk dapat melakukan pencatatan pemberian resep secara digit
 ## Instalasi Aplikasi
 - Download source code atau clone aplikasi [disini](https://github.com/andrisatriawan/e-prescription.git)
 - Pindahkan dan extract file yang telah di download ke dalam folder htdocs.
+- Buat database dengan nama e_prescription
 - Import database e_prescription.sql di dalam folder project.
 - Jalankan aplikasi melalui link berikut http://localhost/e-prescription/
 
