@@ -3,6 +3,36 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
 ?>
     <script>
         $('#tb-resep').DataTable();
+
+        function listObat(id_resep) {
+            $.ajax({
+                type: "POST",
+                url: 'config/data.php?action=list_obat',
+                dataType: "JSON",
+                data: {
+                    id_resep: id_resep
+                },
+                success: function(data) {
+                    if (data.message == 'success') {
+                        $('#list-obat').html(data.list_obat)
+                    }
+                }
+            })
+        }
+
+        $('#modal-detail').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var id_resep = button.data('id')
+            var resep = button.data('resep')
+            var signa = button.data('signa')
+            var link = 'cetak.php?id=' + id_resep;
+
+            var modal = $(this)
+            $('#jenis-resep').html(resep)
+            $('#signa').html(signa)
+            $('#btn-print').attr('href', link)
+            listObat(id_resep);
+        });
     </script>
 <?php } elseif ($_GET['page'] == 'tambah') { ?>
     <script>
@@ -74,8 +104,11 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
         function handleTambahClick() {
             $('#tambah').click(function() {
                 var jenis_resep = $('#jenis-resep').val();
+                var nama_racikan = '';
                 if (jenis_resep == '0') {
                     $(this).addClass('disabled');
+                } else {
+                    nama_racikan = $('#nama-racikan').val();
                 }
 
                 var id_obat = $('#obat').val()
@@ -93,6 +126,9 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
                     success: function(data) {
                         if (data.status == '200') {
                             getForm();
+                            if (jenis_resep == '1') {
+                                $('#nama-racikan').val(nama_racikan)
+                            }
                         }
                     }
                 })
@@ -185,7 +221,7 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
                     $('#validasi-jumlah').html('Jumlah melebihi stok');
                     $('#validasi-jumlah').css('display', 'block');
                     $('#tambah').addClass('disabled');
-                } else if ($(this).val() == '' || $(this).val()==0) {
+                } else if ($(this).val() == '' || $(this).val() == 0) {
                     $('#validasi-jumlah').html('Jumlah tidak boleh kosong');
                     $('#validasi-jumlah').css('display', 'block');
                     $('#tambah').addClass('disabled');
@@ -222,6 +258,7 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
             var jenis_resep = $('#jenis-resep').val();
             var signa = $('#signa').val();
 
+
             $.ajax({
                 type: "POST",
                 url: 'config/data.php?action=simpan_resep',
@@ -234,6 +271,13 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
                 success: function(data) {
                     if (data.message == 'success') {
                         getForm();
+                        var html_message = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Resep berhasil disimpan!</strong> <a href="cetak.php?id=${data.id_resep}" target="blank" class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`;
+                        $('#message').html(html_message);
                     }
                 }
             })

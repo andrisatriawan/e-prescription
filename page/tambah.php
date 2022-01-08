@@ -1,5 +1,8 @@
 <div class="card">
     <div class="card-body">
+        <div id="message">
+
+        </div>
         <div class="form-row">
             <div class="col-md-12 mb-3">
                 <label for="jenis-resep">Jenis Resep</label>

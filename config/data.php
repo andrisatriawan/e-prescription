@@ -139,11 +139,37 @@ if ($_GET['action'] == 'cari_obat') {
 
         if ($q_update) {
             $result['message'] = 'success';
+            $result['id_resep'] = $id_resep;
         } else {
             $result['message'] = 'failed : ' . $koneksi->errno;
         }
     } else {
         $result['message'] = 'failed : ' . $koneksi->errno;
+    }
+
+    echo json_encode($result);
+} elseif ($_GET['action'] == 'list_obat') {
+    $id_resep = $_POST['id_resep'];
+    $q_list = $koneksi->query("SELECT * FROM keranjang_obat INNER JOIN obatalkes_m ON keranjang_obat.id_obat=obatalkes_m.obatalkes_id WHERE id_resep='$id_resep'");
+    $html = '';
+    $i = 1;
+    if ($q_list->num_rows != 0) {
+        while ($row = $q_list->fetch_array()) {
+            $no = $i++;
+            $html .= "<tr>
+            <td>$no</td>
+            <td>$row[obatalkes_nama]</td>
+            <td>$row[jumlah]</td>
+        </tr>";
+        }
+        $result['message'] = 'success';
+        $result['list_obat'] = $html;
+    } else {
+        $html .= "<tr>
+            <td valign='top' colspan='4' class='text-center'>No data available in table</td>
+            </tr>";
+        $result['message'] = 'failed : ' . $koneksi->errno;
+        $result['list_obat'] = $html;
     }
 
     echo json_encode($result);
