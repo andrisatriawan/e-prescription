@@ -124,6 +124,7 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
             // $('#signa').attr('disabled', false)
             $('#simpan').attr('disabled', true)
             getObat();
+            getSigna();
             //Initialize Select2 Elements
             $('.select2').select2()
             tampilKeranjang();
@@ -206,6 +207,16 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
             })
         }
 
+        function getSigna() {
+            $.ajax({
+                type: "POST",
+                url: 'config/data.php?action=get_signa',
+                success: function(data) {
+                    $('#signa').html(data);
+                }
+            })
+        }
+
         function simpanResep() {
             var nama_racikan = $('#nama-racikan').val();
             var jenis_resep = $('#jenis-resep').val();
@@ -235,26 +246,10 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
                 $('#validasi-nama').css('display', 'block')
                 $('#nama-racikan').focus();
             } else {
-                console.log('disimpan');
+                // console.log('disimpan');
+                simpanResep();
             }
         });
-
-        // function validasiSimpan() {
-
-        //     if ($('#signa').val() != '') {
-        //         if ($('#jenis-resep').val() != '0' && $('#nama-racikan').val() != '') {
-        //             $('#simpan').attr('disabled', false);
-        //         } else if ($('#jenis-resep').val() == '0' && $('#nama-racikan').val() == '') {
-        //             $('#simpan').attr('disabled', false);
-        //         } else {
-        //             $('#simpan').attr('disabled', true);
-
-        //         }
-        //     } else {
-        //         $('#simpan').attr('disabled', true);
-
-        //     }
-        // }
 
         $('#signa').change(function() {
             $('#simpan').attr('disabled', false)
@@ -293,7 +288,6 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
-            $('.select2').select2()
 
             'use strict';
             window.addEventListener('load', function() {

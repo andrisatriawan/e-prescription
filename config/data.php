@@ -112,4 +112,39 @@ if ($_GET['action'] == 'cari_obat') {
     }
 
     echo json_encode($return);
+} elseif ($_GET['action'] == 'get_signa') {
+    $query = $koneksi->query("SELECT * FROM signa_m");
+    $html = '<option selected disabled value="">Choose...</option>';
+    while ($row = $query->fetch_array()) {
+        $html .= "<option value=' $row[signa_id] '> $row[signa_nama] </option>";
+    }
+
+    echo $html;
+} elseif ($_GET['action'] == 'simpan_resep') {
+    $nama_racikan = $_POST['nama_racikan'];
+    $jenis_resep = $_POST['jenis_resep'];
+    $signa = $_POST['signa'];
+    $last_update = date("Y-m-d H:i:s");
+
+    $sql_simpan = "INSERT INTO `resep`(`jenis_resep`, `nama_racikan`, `id_signa`, `created_date`, `created_by`) VALUES ('$jenis_resep','$nama_racikan','$signa','$last_update', '1')";
+    $q_simpan = $koneksi->query($sql_simpan);
+
+    if ($q_simpan) {
+        $q_resep = $koneksi->query("SELECT * FROM resep ORDER BY id_resep DESC");
+        $row = $q_resep->fetch_assoc();
+
+        $id_resep = $row['id_resep'];
+
+        $q_update = $koneksi->query("UPDATE keranjang_obat SET id_resep='$id_resep' WHERE id_resep='0' AND created_by='1'");
+
+        if ($q_update) {
+            $result['message'] = 'success';
+        } else {
+            $result['message'] = 'failed : ' . $koneksi->errno;
+        }
+    } else {
+        $result['message'] = 'failed : ' . $koneksi->errno;
+    }
+
+    echo json_encode($result);
 }

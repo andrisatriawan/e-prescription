@@ -41,15 +41,6 @@
 
                 <label for="signa">Signa</label>
                 <select class="custom-select select2" id="signa" required disabled>
-                    <option selected disabled value="">Choose...</option>
-                    <?php
-                    $q_signa = $koneksi->query("SELECT * FROM signa_m");
-                    while ($row_signa = $q_signa->fetch_array()) {
-                    ?>
-                        <option value="<?= $row_signa['signa_id'] ?>"><?= $row_signa['signa_nama'] ?></option>
-                    <?php
-                    }
-                    ?>
 
                 </select>
                 <div class="invalid-feedback">

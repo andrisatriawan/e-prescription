@@ -13,10 +13,9 @@
             </thead>
             <tbody>
                 <?php
-                $query = $koneksi->query('SELECT * FROM resep ORDER BY date_created DESC');
-                $data = $query->fetch_array();
+                $query = $koneksi->query('SELECT * FROM resep ORDER BY created_date DESC');
                 $no = 1;
-                while ($row = $data) {
+                while ($row = $query->fetch_array()) {
                 ?>
                     <tr>
                         <td><?= $no++ ?></td>
