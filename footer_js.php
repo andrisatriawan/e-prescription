@@ -185,7 +185,7 @@ if (@$_GET['page'] == 'beranda' or @$_GET['page'] == '') {
                     $('#validasi-jumlah').html('Jumlah melebihi stok');
                     $('#validasi-jumlah').css('display', 'block');
                     $('#tambah').addClass('disabled');
-                } else if ($(this).val() == '') {
+                } else if ($(this).val() == '' || $(this).val()==0) {
                     $('#validasi-jumlah').html('Jumlah tidak boleh kosong');
                     $('#validasi-jumlah').css('display', 'block');
                     $('#tambah').addClass('disabled');
